@@ -8,11 +8,16 @@
     <p>No blogs yet</p>
     {% else %}
     
-    {% for blog in blogs%}
-    <h2>{{blog.title}}</h2>
-    <p>{{blog.body}}</p>
-    <hr />
-    {% endfor %}
+        {% for blog in blogs%}
+            <h2><a href='/blog?blog-id={{blog.id}}'>{{blog.title}}</a></h2>
+            
+            <form action="/viewpost">
+                <input type="hidden" name="blog-id" value="{{blog.id}}" />
+            </form>
+            
+            <p>{{blog.body}}</p>
+            <hr />
+        {% endfor %}
     
     {% endif %}
 
