@@ -21,11 +21,20 @@ class Blog(db.Model):
 def index():
     id = request.args.get('id')
     blogs = Blog.query.all()
-    
     if id != None:
-        return render_template('post.html', title=blogs[int(id)-1].title, blogs=blogs[int(id)-1])
+        blog = find_blog_by_id(id, blogs)
+        return render_template('post.html', title=blog.title, blogs=blog)
     else:
         return render_template('blogs.html', title='Blog Posts', blogs=blogs)
+
+def find_blog_by_id(id, blogs):
+    result = None
+    for blog in blogs:
+        if blog.id == int(id):
+            result=blog 
+            break;
+
+    return result
 
 @app.route('/newpost')
 def display_newpost_form():
@@ -52,8 +61,9 @@ def newpost():
     if title_error == "" and content_error == "":
         db.session.add(new_blog)
         db.session.commit()
+        id = new_blog.id
 
-        return redirect('/blog')
+        return redirect('/blog?id='+str(id))
     else:
         return render_template("newpost.html", title="New Post", title_error=title_error, content_error=content_error, blog_title=blog_title, body=body)
 
