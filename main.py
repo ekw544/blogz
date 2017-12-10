@@ -3,22 +3,23 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['DEBUG'] = True
-#app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://build-a-blog:build-a-blog@localhost:8889/build-a-blog'
-#app.config['SQLALCHEMY_ECHO'] = True
-#db = SQLAlchemy(app)
-#app.secret_key = 'WRZeIDQ5zpZfPBmdWRZeIDQ5zpZfPBmd'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'mysql+pymysql://build-a-blog:buildablog@localhost:8889/build-a-blog'
+app.config['SQLALCHEMY_ECHO'] = True
+db = SQLAlchemy(app)
+# app.secret_key = 'WRZeIDQ5zpZfPBmdWRZeIDQ5zpZfPBmd'
 
-'''class Blog(db.Model):
+class Blog(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(120))
     body = db.Column(db.Text)
     #owner_id = db.Column(db.Integer, db.ForeignKey('user.id'))
 
     #def __init__(self, title, owner):
-    def __init__(self, title):
+    def __init__(self, title, body):
         self.title = title
-        self.completed = False
-        #self.owner = owner'''
+        self.body = body
+        #self.completed = False
+        #self.owner = owner
 
 # class User(db.Model):
 #     id = db.Column(db.Integer, primary_key=True)
@@ -96,21 +97,26 @@ app.config['DEBUG'] = True
 
 #     return redirect('/')
 
+
 @app.route('/blog')
-def new_post():
-    # blog_id = int(request.form['blog-id'])
+def index():
+    # blog_title = request.form['blog_title']
+    # body = request.form['body']
+    # new_blog = Blog(blog_title, body)
     # blog = Blog.query.get(blog_id)
     # blog.completed = True
     # db.session.add(blog)
     # db.session.commit()
+
+    # db.session.add(new_blog)
+    # db.session.commit()
+    blogs = Blog.query.all()
     return render_template('blogs.html', title='Blog Posts', blogs=blogs)
     # return redirect('/')
 
-blogs = []
-
 @app.route('/newpost')
 def display_newpost_form():
-    return render_template('newpost.html', title='New Post', blogs=blogs)
+    return render_template('newpost.html', title='New Post')
 
 def is_empty(entry):
     return entry == ""
@@ -119,6 +125,7 @@ def is_empty(entry):
 def newpost():
     blog_title = request.form['blog_title']
     body = request.form['body']
+    new_blog = Blog(blog_title, body)
 
     title_error = ""
     content_error = ""
@@ -133,11 +140,9 @@ def newpost():
     #     return render_template('newpost.html', title='New Post', blogs=blogs)
     
     if title_error == "" and content_error == "":
-        blogs.append({
-            "blog_title": blog_title,
-            "body": body
-        })
-        
+        db.session.add(new_blog)
+        db.session.commit()
+
         return redirect('/blog')
     else:
         return render_template("newpost.html", title="New Post", title_error=title_error, content_error=content_error, blog_title=blog_title, body=body)

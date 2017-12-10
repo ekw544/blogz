@@ -3,12 +3,12 @@
 
 <form action="/newpost" method="post" id="newpostform">
 
-    <span>
+    <label for="blog-title">
         Title of Blog:
-    </span>
+    </label>
 
     <br>
-    <input type="text" name="blog_title" value="{{blog_title}}" />
+    <input id="blog-title"type="text" name="blog_title" value="{{blog_title}}" />
     <br>
 
     <span class="error">{{title_error}}</span>
