@@ -9,10 +9,10 @@
     {% else %}
     
         {% for blog in blogs%}
-            <h2><a href='/blog?blog-id={{blog.id}}'>{{blog.title}}</a></h2>
+            <h2><a href='/blog?id={{blog.id}}'>{{blog.title}}</a></h2>
             
-            <form action="/viewpost">
-                <input type="hidden" name="blog-id" value="{{blog.id}}" />
+            <form>
+                <input type="hidden" name="id" value="{{blog.id}}" />
             </form>
             
             <p>{{blog.body}}</p>

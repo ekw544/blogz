@@ -16,16 +16,14 @@ class Blog(db.Model):
     def __init__(self, title, body):
         self.title = title
         self.body = body
-        #self.completed = False
-        #self.owner = owner
 
 @app.route('/blog')
 def index():
-    blog_id = request.args.get('blog-id')
+    id = request.args.get('id')
     blogs = Blog.query.all()
     
-    if blog_id != None:
-        return render_template('blogs.html', title='Blog Posts', blogs=[blogs[int(blog_id)-1]])
+    if id != None:
+        return render_template('post.html', title=blogs[int(id)-1].title, blogs=blogs[int(id)-1])
     else:
         return render_template('blogs.html', title='Blog Posts', blogs=blogs)
 
@@ -58,14 +56,6 @@ def newpost():
         return redirect('/blog')
     else:
         return render_template("newpost.html", title="New Post", title_error=title_error, content_error=content_error, blog_title=blog_title, body=body)
-
-@app.route('/viewpost')
-def view_post():
-
-    blog_id = int(request.form['blog-id'])
-    blog = Blog.query.get(blog_id)
-
-    return redirect('/blog')   
 
 if __name__ == '__main__':
     app.run()
