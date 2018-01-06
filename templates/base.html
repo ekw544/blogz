@@ -30,6 +30,8 @@
         <a href='/blog'>Main Blog Page</a>
         &emsp;
         <a href='/newpost'>Add a Blog Entry</a>
+        &emsp;
+        <a href='/logout'>Log Out</a>
         {% with messages = get_flashed_messages(with_categories=True) %}
             <ul>
             {% for category,message in messages %}
